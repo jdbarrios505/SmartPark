@@ -1,0 +1,15 @@
+C:\Users\julian\source\repos\SmartPark\bin\Debug\net10.0\SmartPark.exe
+C:\Users\julian\source\repos\SmartPark\bin\Debug\net10.0\SmartPark.deps.json
+C:\Users\julian\source\repos\SmartPark\bin\Debug\net10.0\SmartPark.runtimeconfig.json
+C:\Users\julian\source\repos\SmartPark\bin\Debug\net10.0\SmartPark.dll
+C:\Users\julian\source\repos\SmartPark\bin\Debug\net10.0\SmartPark.pdb
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\SmartPark.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\SmartPark.AssemblyInfoInputs.cache
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\SmartPark.AssemblyInfo.cs
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\SmartPark.csproj.CoreCompileInputs.cache
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\SmartPark.sourcelink.json
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\SmartPark.dll
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\refint\SmartPark.dll
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\SmartPark.pdb
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\SmartPark.genruntimeconfig.cache
+C:\Users\julian\source\repos\SmartPark\obj\Debug\net10.0\ref\SmartPark.dll

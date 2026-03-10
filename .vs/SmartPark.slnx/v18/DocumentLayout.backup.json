@@ -1,0 +1,44 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\julian\\source\\repos\\SmartPark\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{04ED4D5B-FD12-E379-4234-8F8B602B392A}|SmartPark.csproj|c:\\users\\julian\\source\\repos\\smartpark\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{04ED4D5B-FD12-E379-4234-8F8B602B392A}|SmartPark.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\julian\\source\\repos\\SmartPark\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\julian\\source\\repos\\SmartPark\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAIMBAAAAAAAAAAAAAJIBAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-03T13:12:22.025Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
