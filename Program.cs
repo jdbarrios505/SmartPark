@@ -6,46 +6,47 @@ namespace SmartPark
 	{
 		static void Main(string[] args)
 		{
-
+			// ==========================================
 			// DECLARACIÓN DE VARIABLES
+			// ==========================================
 
-			// Variables del Sistema
-			string nombreOperador = "";
-			string codigoTurno = "";
-			// Capacidad fijada a 10 según instrucción
-			int capacidadTotal = 10;
-			int ticketsCreados = 0;
-			int ticketsCerrados = 0;
-			double dineroRecaudado = 0.0;
-			int tiempoSimulado = 0; // En minutos
+			// Variables del Sistema - Información del operador y configuración del parqueo
+			string nombreOperador = "";      // Nombre del operador del turno
+			string codigoTurno = "";         // Código de turno de 4 caracteres
+			int capacidadTotal = 0;          // Capacidad máxima del parqueo (mínimo 10)
+			int ticketsCreados = 0;          // Contador de tickets creados durante el turno
+			int ticketsCerrados = 0;         // Contador de tickets cerrados y pagados
+			double dineroRecaudado = 0.0;    // Total de dinero recaudado en el turno
+			int tiempoSimulado = 0;          // Tiempo simulado del sistema en minutos
 
-			// Variables del Ticket Activo
-			bool ticketActivo = false;
-			string placa = "";
-			int tipoVehiculo = 0; // 1=Moto, 2=Auto, 3=Pickup
-			string nombreCliente = "";
-			bool esVip = false;
-			int minutoEntrada = 0;
+			// Variables del Ticket Activo - Información del vehículo estacionado actualmente
+			bool ticketActivo = false;       // Indica si hay un vehículo actualmente estacionado
+			string placa = "";               // Placa del vehículo (6-8 caracteres)
+			int tipoVehiculo = 0;            // Tipo de vehículo: 1=Moto, 2=Auto, 3=Pickup/SUV
+			string nombreCliente = "";       // Nombre del cliente propietario del vehículo
+			bool esVip = false;              // Indica si el cliente tiene estatus VIP
+			int minutoEntrada = 0;           // Minuto de entrada del vehículo actual
 
-			// Variables Auxiliares
-			string opcionMenu = "";
-			int minutosIngresados = 0;
-			int minutosEstacionados = 0;
-			double tarifaPorHora = 0;
-			double horasCobradas = 0;
-			double cobroBase = 0;
-			double multa = 0;
-			double descuento = 0;
-			double recargoPermanencia = 0;
-			double montoFinal = 0;
-			bool entradaValida = false;
+			// Variables Auxiliares - Cálculos intermedios para tarifas y cobros
+			string opcionMenu = "";          // Opción seleccionada por el usuario en el menú
+			int minutosIngresados = 0;       // Minutos ingresados para simular paso del tiempo
+			int minutosEstacionados = 0;     // Duración total del estacionamiento en minutos
+			double tarifaPorHora = 0;        // Tarifa por hora según tipo de vehículo
+			double horasCobradas = 0;        // Número de horas a cobrar (incluye fracciones)
+			double cobroBase = 0;            // Cobro base sin multas ni descuentos
+			double multa = 0;                // Multa por exceso de tiempo (>6 horas)
+			double descuento = 0;            // Descuento VIP aplicado
+			double recargoPermanencia = 0;   // Recargo adicional por permanencia prolongada (>12 horas)
+			double montoFinal = 0;           // Monto final a pagar por el cliente
+			bool entradaValida = false;      // Bandera para validar entradas numéricas
 
 			// ==========================================
 			// 1. REGISTRO INICIAL DEL SISTEMA
 			// ==========================================
+			// Configurar título de la ventana de consola
 			Console.Title = "SmartPark - Sistema de Parqueo Inteligente";
 
-			// Color Azul reemplazando a Cyan
+			// Mostrar banner de bienvenida en color azul
 			Console.ForegroundColor = ConsoleColor.Blue;
 			Console.WriteLine("================================================================");
 			Console.WriteLine("   _____ __  __          _____ _______ _____         _____  _  __");
@@ -53,7 +54,7 @@ namespace SmartPark
 			Console.WriteLine(" | (___ | \\  / |  /  \\  | |__) | | |  | |__) | /  \\ | |__) | ' / ");
 			Console.WriteLine("  \\___ \\| |\\/| | / /\\ \\ |  _  /  | |  |  ___/ / /\\ \\|  _  /|  <  ");
 			Console.WriteLine("  ____) | |  | |/ ____ \\| | \\ \\  | |  | |    / ____ \\ | \\ \\| . \\ ");
-			Console.WriteLine(" |_____/|_|  |_/_/    \\_\\_|  \\_\\ |_|  |_|   /_/    \\_\\_|  \\_\\_|\\_\\");
+			Console.WriteLine(" |_____/|_|  |_/_/    \\_\\_|  \\_\\ |_|  |_|   /_/    \\_\\|  \\_\\_|\\_\\");
 			Console.WriteLine("");
 			Console.WriteLine("================================================================");
 			Console.WriteLine("                     SISTEMA SMARTPARK                          ");
@@ -62,35 +63,51 @@ namespace SmartPark
 			Console.WriteLine("================================================================");
 			Console.ResetColor();
 
-			// Solicitar Nombre del Operador
+			// Solicitar nombre del operador
 			Console.Write("Ingrese el nombre del operador: ");
 			nombreOperador = Console.ReadLine();
 
-			// Validar Código de Turno (Exactamente 4 caracteres)
+			// Validar código de turno: debe tener exactamente 4 caracteres
 			do
 			{
 				Console.Write("Ingrese el código de turno (4 caracteres): ");
 				codigoTurno = Console.ReadLine();
 				if (codigoTurno.Length != 4)
 				{
-					Console.ForegroundColor = ConsoleColor.DarkBlue; // Error en Azul Oscuro
+					// Mostrar mensaje de error en color rojo
+					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine("Error: El código debe tener exactamente 4 caracteres.");
 					Console.ResetColor();
 				}
 			} while (codigoTurno.Length != 4);
 
-			// Capacidad del parqueo eliminada (Fijada en 10 automáticamente)
-			Console.WriteLine("Capacidad del parqueo configurada automáticamente a 10 espacios.");
+			// Solicitar capacidad del parqueo: mínimo 10 espacios
+			do
+			{
+				Console.Write("Ingrese la capacidad del parqueo (mínimo 10 espacios): ");
+				// Intentar convertir entrada a número entero
+				entradaValida = int.TryParse(Console.ReadLine(), out capacidadTotal);
+				if (!entradaValida || capacidadTotal < 10)
+				{
+					// Mostrar mensaje de error si la entrada no es válida o es menor a 10
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine("Error: La capacidad debe ser un número entero mayor o igual a 10.");
+					Console.ResetColor();
+				}
+			} while (!entradaValida || capacidadTotal < 10);
 
-			// Inicializar Contadores
+			// Inicializar contadores y estado del sistema
 			ticketsCreados = 0;
 			ticketsCerrados = 0;
 			dineroRecaudado = 0.0;
 			tiempoSimulado = 0;
 			ticketActivo = false;
 
-			Console.ForegroundColor = ConsoleColor.Green; // Confirmación en Verde
-			Console.WriteLine("\nSistema inicializado correctamente. Presione cualquier tecla para continuar...");
+			// Mostrar confirmación de inicialización en color verde
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine($"\nSistema inicializado correctamente.");
+			Console.WriteLine($"Capacidad del parqueo: {capacidadTotal} espacios.");
+			Console.WriteLine("Presione cualquier tecla para continuar...");
 			Console.ResetColor();
 			Console.ReadKey();
 			Console.Clear();
@@ -98,18 +115,19 @@ namespace SmartPark
 			// ==========================================
 			// 2. MENÚ INTERACTIVO (CICLO PRINCIPAL)
 			// ==========================================
+			// Ciclo infinito que continúa hasta que el usuario selecciona "Salir"
 			while (true)
 			{
-				// Mostrar Menú
+				// Limpiar pantalla y mostrar menú principal
 				Console.Clear();
-				Console.ForegroundColor = ConsoleColor.Blue; // Menú en Azul
+				Console.ForegroundColor = ConsoleColor.Blue;
 				Console.WriteLine("================================================================");
 				Console.WriteLine("   _____ __  __          _____ _______ _____         _____  _  __");
 				Console.WriteLine("  / ____|  \\/  |   /\\   |  __ \\__   __|  __ \\   /\\  |  __ \\| |/ /");
 				Console.WriteLine(" | (___ | \\  / |  /  \\  | |__) | | |  | |__) | /  \\ | |__) | ' / ");
 				Console.WriteLine("  \\___ \\| |\\/| | / /\\ \\ |  _  /  | |  |  ___/ / /\\ \\|  _  /|  <  ");
 				Console.WriteLine("  ____) | |  | |/ ____ \\| | \\ \\  | |  | |    / ____ \\ | \\ \\| . \\ ");
-				Console.WriteLine(" |_____/|_|  |_/_/    \\_\\_|  \\_\\ |_|  |_|   /_/    \\_\\_|  \\_\\_|\\_\\");
+				Console.WriteLine(" |_____/|_|  |_/_/    \\_\\_|  \\_\\ |_|  |_|   /_/    \\_\\|  \\_\\_|\\_\\");
 				Console.WriteLine("");
 				Console.WriteLine("================================================================");
 				Console.WriteLine("                     SISTEMA SMARTPARK                          ");
@@ -118,51 +136,68 @@ namespace SmartPark
 				Console.WriteLine("================================================================");
 				Console.ResetColor();
 
+				// Calcular espacios disponibles para mostrar estado actual del parqueo
+				int espaciosOcupados = (ticketActivo) ? 1 : 0;
+				int espaciosDisponibles = capacidadTotal - espaciosOcupados;
+
+				// Mostrar información actual del sistema
 				Console.WriteLine($"Operador: {nombreOperador} | Turno: {codigoTurno}");
-				Console.WriteLine($"Tiempo Simulado: {tiempoSimulado} minutos");
+				Console.WriteLine($"Tiempo Simulado: {tiempoSimulado} minutos | Espacios Disponibles: {espaciosDisponibles}/{capacidadTotal}");
 				Console.WriteLine("----------------------------------------------");
 				Console.WriteLine("A. CREAR TICKET DE ENTRADA");
 				Console.WriteLine("B. REGISTRAR SALIDA Y CALCULAR COBRO");
 				Console.WriteLine("C. VER ESTADO DEL PARQUEO");
 				Console.WriteLine("D. SIMULAR PASO DEL TIEMPO");
-				Console.WriteLine("F. SALIR");
+				Console.WriteLine("E. SALIR");
 				Console.WriteLine("==============================================");
 
-				Console.ForegroundColor = ConsoleColor.Green; // Indicador en Verde
+				// Solicitar opción del usuario
+				Console.ForegroundColor = ConsoleColor.Green;
 				Console.Write("Seleccione una opción: ");
 				Console.ResetColor();
 
 				opcionMenu = Console.ReadLine().ToUpper();
 
-				// Lógica de Opciones
+				// Procesar opción seleccionada
 				switch (opcionMenu)
 				{
 					// ---------------------------------------------------
-					// A. CREAR TICKET DE ENTRADA
+					// OPCIÓN A: CREAR TICKET DE ENTRADA
 					// ---------------------------------------------------
 					case "A":
 						Console.Clear();
-						Console.ForegroundColor = ConsoleColor.Blue; // Título en Azul
+						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.WriteLine("--- NUEVO INGRESO DE VEHÍCULO ---");
 						Console.ResetColor();
 
-						// Validar que no exista ticket activo
+						// Recalcular espacios disponibles
+						espaciosOcupados = (ticketActivo) ? 1 : 0;
+						espaciosDisponibles = capacidadTotal - espaciosOcupados;
+
+						// Validar que no exista un ticket activo
 						if (ticketActivo)
 						{
-							Console.ForegroundColor = ConsoleColor.DarkBlue; // Error en Azul Oscuro
+							Console.ForegroundColor = ConsoleColor.Red;
 							Console.WriteLine("Error: Ya existe un ticket activo. Debe registrar la salida del vehículo actual primero.");
+							Console.ResetColor();
+						}
+						// Validar que el parqueo no esté lleno
+						else if (espaciosDisponibles == 0)
+						{
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("Error: El parqueo está lleno. No se puede crear un nuevo ticket en este momento.");
 							Console.ResetColor();
 						}
 						else
 						{
-							// Solicitar Placa (6 a 8 caracteres, sin espacios)
+							// Solicitar placa del vehículo: 6 a 8 caracteres, sin espacios
 							do
 							{
 								Console.Write("Ingrese la placa del vehículo (6-8 caracteres, sin espacios): ");
 								placa = Console.ReadLine();
 								if (placa.Length < 6 || placa.Length > 8 || placa.Contains(" "))
 								{
-									Console.ForegroundColor = ConsoleColor.DarkBlue;
+									Console.ForegroundColor = ConsoleColor.Red;
 									Console.WriteLine("Dato inválido. Intente de nuevo.");
 									Console.ResetColor();
 								}
@@ -172,34 +207,36 @@ namespace SmartPark
 								}
 							} while (true);
 
-							// Solicitar Tipo de Vehículo (Revertido a selección manual)
+							// Solicitar tipo de vehículo: 1=Moto, 2=Auto, 3=Pickup/SUV
 							do
 							{
 								Console.Write("Tipo de vehículo (1=Moto, 2=Auto, 3=Pickup/SUV): ");
 								entradaValida = int.TryParse(Console.ReadLine(), out tipoVehiculo);
 								if (!entradaValida || tipoVehiculo < 1 || tipoVehiculo > 3)
 								{
-									Console.ForegroundColor = ConsoleColor.DarkBlue;
+									Console.ForegroundColor = ConsoleColor.Red;
 									Console.WriteLine("Opción inválida. Ingrese 1, 2 o 3.");
 									Console.ResetColor();
 								}
 							} while (!entradaValida || tipoVehiculo < 1 || tipoVehiculo > 3);
 
-							// Solicitar Nombre del Cliente
+							// Solicitar nombre del cliente
 							Console.Write("Nombre del cliente: ");
 							nombreCliente = Console.ReadLine();
 
-							// Solicitar si es VIP
+							// Preguntar si el cliente tiene estatus VIP
 							Console.Write("¿El cliente es VIP? (S/N): ");
 							esVip = Console.ReadLine().ToUpper() == "S";
 
-							// Guardar datos y activar ticket
+							// Guardar información del ticket y activarlo
 							minutoEntrada = tiempoSimulado;
 							ticketActivo = true;
 							ticketsCreados++;
 
-							Console.ForegroundColor = ConsoleColor.Green; // Éxito en Verde
+							// Mostrar confirmación en color verde
+							Console.ForegroundColor = ConsoleColor.Green;
 							Console.WriteLine($"\n¡Ticket creado exitosamente!");
+							Console.WriteLine($"Placa: {placa}");
 							Console.WriteLine($"Hora de entrada (simulada): {minutoEntrada} minutos.");
 							Console.ResetColor();
 						}
@@ -208,33 +245,38 @@ namespace SmartPark
 						break;
 
 					// ---------------------------------------------------
-					// B. REGISTRAR SALIDA Y CALCULAR COBRO
+					// OPCIÓN B: REGISTRAR SALIDA Y CALCULAR COBRO
 					// ---------------------------------------------------
 					case "B":
 						Console.Clear();
-						Console.ForegroundColor = ConsoleColor.Blue; // Título en Azul
+						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.WriteLine("--- REGISTRO DE SALIDA Y COBRO ---");
 						Console.ResetColor();
 
+						// Validar que exista un ticket activo para procesar
 						if (!ticketActivo)
 						{
-							Console.ForegroundColor = ConsoleColor.DarkBlue; // Error en Azul Oscuro
+							Console.ForegroundColor = ConsoleColor.Red;
 							Console.WriteLine("Error: No hay ningún ticket activo para procesar.");
 							Console.ResetColor();
 						}
 						else
 						{
-							// 1. Calcular tiempo estacionado
+							// Calcular tiempo total estacionado en minutos
 							minutosEstacionados = tiempoSimulado - minutoEntrada;
 
+							Console.WriteLine($"Placa: {placa}");
+							Console.WriteLine($"Cliente: {nombreCliente}");
 							Console.WriteLine($"Tiempo total estacionado: {minutosEstacionados} minutos.");
 
-							// 2. Determinar tarifa según PDF
-							if (tipoVehiculo == 1) tarifaPorHora = 5.0;   // Moto
-							else if (tipoVehiculo == 2) tarifaPorHora = 10.0; // Auto
-							else tarifaPorHora = 15.0;                      // Pickup
+							// Determinar tarifa por hora según tipo de vehículo
+							if (tipoVehiculo == 1) tarifaPorHora = 5.0;      // Moto: Q5/hora
+							else if (tipoVehiculo == 2) tarifaPorHora = 10.0; // Auto: Q10/hora
+							else tarifaPorHora = 15.0;                       // Pickup: Q15/hora
 
-							// 3. Calcular cobro base (Por fracción de hora)
+							// Calcular cobro base considerando:
+							// - Gratuidad para estacionamientos de 15 minutos o menos
+							// - Cobro por fracción de hora para estacionamientos mayores
 							if (minutosEstacionados <= 15)
 							{
 								cobroBase = 0;
@@ -242,6 +284,7 @@ namespace SmartPark
 							}
 							else
 							{
+								// Math.Ceiling redondea hacia arriba para cobrar por cada fracción de hora
 								horasCobradas = Math.Ceiling(minutosEstacionados / 60.0);
 								cobroBase = horasCobradas * tarifaPorHora;
 							}
@@ -249,52 +292,55 @@ namespace SmartPark
 							Console.WriteLine($"Tarifa aplicada: Q{tarifaPorHora}/hora. Horas cobradas: {horasCobradas}.");
 							Console.WriteLine($"Subtotal: Q{cobroBase}");
 
-							// 4. Multa (> 6 horas) según PDF: Q25 fijos
+							// Aplicar multa si el estacionamiento excede 6 horas (360 minutos)
 							multa = 0;
-							if (minutosEstacionados > 360) // 6 horas * 60 min
+							if (minutosEstacionados > 360)
 							{
 								multa = 25.0;
-								Console.ForegroundColor = ConsoleColor.DarkGreen; // Advertencia en Verde Oscuro
+								Console.ForegroundColor = ConsoleColor.Yellow;
 								Console.WriteLine($"¡Multa aplicada por tiempo extendido (>6h): Q{multa}");
 								Console.ResetColor();
 							}
 
-							// 5. Descuento VIP según PDF: 10%
+							// Aplicar descuento VIP del 10% sobre cobro base + multa
 							descuento = 0;
 							if (esVip)
 							{
 								descuento = (cobroBase + multa) * 0.10;
-								Console.WriteLine($"Descuento VIP (10%): -Q{descuento}");
-							}
-
-							// Cálculo intermedio
-							double subtotalConDescuento = (cobroBase + multa) - descuento;
-
-							// 6. Recargo por permanencia extrema (> 12 horas) según PDF: 20%
-							recargoPermanencia = 0;
-							if (minutosEstacionados > 720) // 12 horas * 60 min
-							{
-								recargoPermanencia = subtotalConDescuento * 0.20;
-								Console.ForegroundColor = ConsoleColor.DarkGreen; // Advertencia en Verde Oscuro
-								Console.WriteLine($"¡Recargo por permanencia extrema (>12h): Q{recargoPermanencia}");
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.WriteLine($"Descuento VIP (10%): -Q{descuento:F2}");
 								Console.ResetColor();
 							}
 
-							// 7. Monto Final
+							// Calcular subtotal después de aplicar descuento VIP
+							double subtotalConDescuento = (cobroBase + multa) - descuento;
+
+							// Aplicar recargo por permanencia extrema si excede 12 horas (720 minutos)
+							// El recargo es del 20% sobre el monto después de descuentos
+							recargoPermanencia = 0;
+							if (minutosEstacionados > 720)
+							{
+								recargoPermanencia = subtotalConDescuento * 0.20;
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.WriteLine($"¡Recargo por permanencia extrema (>12h): Q{recargoPermanencia:F2}");
+								Console.ResetColor();
+							}
+
+							// Calcular monto final a pagar
 							montoFinal = subtotalConDescuento + recargoPermanencia;
 
-							// Actualizar sistema
+							// Actualizar registros del sistema
 							dineroRecaudado += montoFinal;
 							ticketsCerrados++;
 
 							// Mostrar resumen de pago
 							Console.WriteLine("========================================");
-							Console.ForegroundColor = ConsoleColor.Green; // Resultado final en Verde
+							Console.ForegroundColor = ConsoleColor.Green;
 							Console.WriteLine($"TOTAL A PAGAR: Q{montoFinal:F2}");
 							Console.ResetColor();
 							Console.WriteLine("========================================");
 
-							// Liberar ticket
+							// Liberar ticket: reiniciar variables del vehículo activo
 							ticketActivo = false;
 							placa = "";
 							nombreCliente = "";
@@ -306,17 +352,19 @@ namespace SmartPark
 						break;
 
 					// ---------------------------------------------------
-					// C. VER ESTADO DEL PARQUEO
+					// OPCIÓN C: VER ESTADO DEL PARQUEO
 					// ---------------------------------------------------
 					case "C":
 						Console.Clear();
-						Console.ForegroundColor = ConsoleColor.Blue; // Título en Azul
+						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.WriteLine("--- ESTADO DEL PARQUEO ---");
 						Console.ResetColor();
 
-						int espaciosOcupados = (ticketActivo) ? 1 : 0;
-						int espaciosDisponibles = capacidadTotal - espaciosOcupados;
+						// Calcular espacios ocupados y disponibles
+						espaciosOcupados = (ticketActivo) ? 1 : 0;
+						espaciosDisponibles = capacidadTotal - espaciosOcupados;
 
+						// Mostrar estado actual del sistema
 						Console.WriteLine($"Capacidad Total: {capacidadTotal}");
 						Console.WriteLine($"Espacios Ocupados: {espaciosOcupados}");
 						Console.WriteLine($"Espacios Disponibles: {espaciosDisponibles}");
@@ -332,15 +380,15 @@ namespace SmartPark
 						break;
 
 					// ---------------------------------------------------
-					// D. SIMULAR PASO DEL TIEMPO
+					// OPCIÓN D: SIMULAR PASO DEL TIEMPO
 					// ---------------------------------------------------
 					case "D":
 						Console.Clear();
-						Console.ForegroundColor = ConsoleColor.Blue; // Título en Azul
+						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.WriteLine("--- SIMULAR TIEMPO ---");
 						Console.ResetColor();
 
-						// Solicitar minutos (1 a 1440) según PDF
+						// Solicitar número de minutos a avanzar: entre 1 y 1440 (24 horas)
 						entradaValida = false;
 						do
 						{
@@ -348,34 +396,38 @@ namespace SmartPark
 							entradaValida = int.TryParse(Console.ReadLine(), out minutosIngresados);
 							if (!entradaValida || minutosIngresados < 1 || minutosIngresados > 1440)
 							{
-								Console.ForegroundColor = ConsoleColor.DarkBlue; // Error en Azul Oscuro
+								Console.ForegroundColor = ConsoleColor.Red;
 								Console.WriteLine("Valor inválido. Ingrese un número entre 1 y 1440.");
 								Console.ResetColor();
 							}
 						} while (!entradaValida || minutosIngresados < 1 || minutosIngresados > 1440);
 
-						// Sumar al tiempo actual
+						// Sumar minutos ingresados al tiempo simulado total
 						tiempoSimulado += minutosIngresados;
 
-						Console.ForegroundColor = ConsoleColor.Green; // Confirmación en Verde
+						// Mostrar confirmación
+						Console.ForegroundColor = ConsoleColor.Green;
 						Console.WriteLine($"\nTiempo acumulado actual: {tiempoSimulado} minutos.");
 						Console.ResetColor();
 
-						// Advertencias según PDF
+						// Mostrar advertencias si hay un ticket activo y se exceden límites de tiempo
 						if (ticketActivo)
 						{
+							// Calcular tiempo que lleva estacionado el vehículo actual
 							int tiempoActualAuto = tiempoSimulado - minutoEntrada;
 
+							// Advertencia si excede 6 horas pero aún no llega a 12
 							if (tiempoActualAuto > 360 && tiempoActualAuto <= 720)
 							{
-								Console.ForegroundColor = ConsoleColor.DarkGreen; // Advertencia en Verde Oscuro
+								Console.ForegroundColor = ConsoleColor.Yellow;
 								Console.WriteLine("ADVERTENCIA: El vehículo actual supera las 6 horas. Multa próxima.");
 								Console.ResetColor();
 							}
+							// Advertencia si excede 12 horas
 							else if (tiempoActualAuto > 720)
 							{
-								Console.ForegroundColor = ConsoleColor.DarkGreen; // Advertencia en Verde Oscuro
-								Console.WriteLine("ADVERTENCIA: El vehículo actual supera las 12 horas. Recargo por permanencia extrema.");
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.WriteLine("ADVERTENCIA: El vehículo actual supera las 12 horas. Recargo por permanencia extrema aplicable.");
 								Console.ResetColor();
 							}
 						}
@@ -385,28 +437,35 @@ namespace SmartPark
 						break;
 
 					// ---------------------------------------------------
-					// F. SALIR
+					// OPCIÓN E: SALIR DEL SISTEMA
 					// ---------------------------------------------------
-					case "F":
+					case "E":
 						Console.Clear();
-						Console.ForegroundColor = ConsoleColor.Blue; // Título en Azul
+						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.WriteLine("--- RESUMEN FINAL DEL TURNO ---");
 						Console.ResetColor();
+
+						// Mostrar resumen completo del turno
 						Console.WriteLine($"Operador: {nombreOperador}");
 						Console.WriteLine($"Código de Turno: {codigoTurno}");
+						Console.WriteLine($"Capacidad del Parqueo: {capacidadTotal}");
 						Console.WriteLine($"Tickets Creados: {ticketsCreados}");
 						Console.WriteLine($"Tickets Cerrados: {ticketsCerrados}");
 						Console.WriteLine($"Dinero Recaudado: Q{dineroRecaudado:F2}");
 
-						Console.ForegroundColor = ConsoleColor.Green; // Mensaje final en Verde
+						// Mostrar mensaje de despedida
+						Console.ForegroundColor = ConsoleColor.Green;
 						Console.WriteLine("\nGracias por usar SmartPark. ¡Hasta pronto!");
 						Console.ResetColor();
 
-						// Salir del ciclo (y del programa)
+						// Terminar el programa
 						return;
 
+					// ---------------------------------------------------
+					// OPCIÓN INVÁLIDA
+					// ---------------------------------------------------
 					default:
-						Console.ForegroundColor = ConsoleColor.DarkBlue; // Error de opción en Azul Oscuro
+						Console.ForegroundColor = ConsoleColor.Red;
 						Console.WriteLine("\nOpción no válida. Intente nuevamente.");
 						Console.ResetColor();
 						Console.ReadKey();

@@ -30,11 +30,12 @@
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\julian\\source\\repos\\SmartPark\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\julian\\source\\repos\\SmartPark\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAIMBAAAAAAAAAAAAAJIBAAAbAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\julian\\source\\repos\\SmartPark\\Program.cs*",
+              "RelativeToolTip": "Program.cs*",
+              "ViewState": "AgIAAKoBAAAAAAAAAAAiwMkBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-03T13:12:22.025Z"
+              "WhenOpened": "2026-03-03T13:12:22.025Z",
+              "EditorCaption": ""
             }
           ]
         }
